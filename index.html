@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demo — Infinity E-commerce (Loja de Acessórios)</title>
+  <meta name="description" content="Demo de e-commerce - acessórios. Exemplo de loja desenvolvida pela Infinity E-commerce.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="demo-hero">
+    <nav class="nav container">
+      <a class="brand" href="index.html">Infinity E-commerce</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home Demo</a></li>
+        <li><a href="produtos.html">Produtos</a></li>
+        <li><a href="carrinho.html">Carrinho <span id="mini-count">0</span></a></li>
+        <li><a href="index.html">Voltar ao site</a></li>
+      </ul>
+    </nav>
+
+    <div class="demo-hero-content container">
+      <div>
+        <h1>Loja Demo — Acessórios Premium</h1>
+        <p class="lead">Exemplo funcional de e-commerce desenvolvido para demonstrar catálogo, produto, carrinho e checkout simulado.</p>
+        <div class="hero-ctas">
+          <a class="btn primary" href="produtos.html">Ver produtos</a>
+          <a class="btn ghost" href="carrinho.html">Abrir carrinho</a>
+        </div>
+      </div>
+
+      <div class="hero-mockup">
+        <img src="https://via.placeholder.com/720x480/0b0b0b/ffffff?text=Demo+Loja+de+Acess%C3%B3rios" alt="Mockup demo">
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section features">
+      <h2 class="titulo">O que este demo mostra</h2>
+      <div class="grid-3">
+        <div class="feature">
+          <h3>Catálogo simples</h3>
+          <p>Produtos com variações básicas, imagens e descrição clara.</p>
+        </div>
+        <div class="feature">
+          <h3>Carrinho & Simulação de checkout</h3>
+          <p>Adicionar, remover itens e persistência local (localStorage).</p>
+        </div>
+        <div class="feature">
+          <h3>Integrações simuladas</h3>
+          <p>Exemplifica integração com WhatsApp (link), rastreamento e métodos de pagamento seguros.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section produtos-home">
+      <h2 class="titulo">Produtos em destaque</h2>
+      <div id="home-products" class="grid-3"></div>
+      <div class="center"><a href="produtos.html" class="btn outline">Ver todo o catálogo</a></div>
+    </section>
+
+    <section class="section about-demo">
+      <h2 class="titulo">Sobre este exemplo</h2>
+      <p class="muted">
+        Loja de acessórios criada como referência. Tudo aqui é fictício — use como base para apresentar a plataforma a clientes.
+        A integração com WhatsApp, o painel administrativo e as funcionalidades apresentadas são exemplos do que a plataforma oferece.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Infinity E-commerce — Demo</strong>
+        <p class="muted">Exemplo de loja de acessórios — sem back-end (simulado).</p>
+      </div>
+      <div>
+        <p class="muted">© <span id="year"></span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

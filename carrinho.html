@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carrinho — Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav container">
+    <a class="brand" href="index.html">Demo</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="produtos.html">Produtos</a></li>
+      <li><a href="carrinho.html" aria-current="page">Carrinho</a></li>
+    </ul>
+  </nav>
+
+  <main class="container section">
+    <h1 class="titulo">Seu Carrinho</h1>
+    <div id="cart" class="cart"></div>
+
+    <div class="cart-actions">
+      <button id="clear-cart" class="btn ghost">Esvaziar carrinho</button>
+      <button id="fake-checkout" class="btn primary">Simular Checkout</button>
+    </div>
+
+    <div id="checkout-message" class="muted" style="margin-top:14px;"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Infinity E-commerce — Demo</strong></div>
+      <div class="muted">© <span id="year-4"></span></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
