@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Ônix Deluxe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav container">
+    <a class="brand" href="index.html">Ônix Deluxe — Admin</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Loja</a></li>
+      <li><a href="produtos.html">Produtos</a></li>
+      <li><a href="admin.html" aria-current="page">Pedidos</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-wrap">
+    <div class="admin-card">
+      <h2>Pedidos salvos (local)</h2>
+      <div class="admin-actions">
+        <button id="download-all" class="btn primary">Baixar todos (JSON)</button>
+        <button id="clear-orders" class="btn ghost">Limpar pedidos</button>
+        <button id="refresh-orders" class="btn ghost">Atualizar</button>
+      </div>
+
+      <table class="admin-table" id="orders-table">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Itens</th>
+            <th>Total</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <!-- preenchido por JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Ônix Deluxe — Admin</strong></div>
+      <div class="muted">© <span id="year"></span></div>
+    </div>
+  </footer>
+
+  <script>
+    // admin script (pequeno)
+    (function(){
+      const ordersKey = 'onix_orders_v1';
+      function getOrders(){ return JSON.parse(localStorage.getItem(ordersKey) || '[]'); }
+      function setOrders(list){ localStorage.setItem(ordersKey, JSON.stringify(list)); }
+      function formatBRL(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+
+      function render(){
+        const tbody = document.getElementById('orders-tbody');
+        const list = getOrders();
+        tbody.innerHTML = '';
+        if(list.length === 0){
+          tbody.innerHTML = '<tr><td colspan="7" style="color:var(--muted)">Nenhum pedido encontrado.</td></tr>';
+          return;
+        }
+        list.slice().reverse().forEach(order=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.customer.name}${order.customer.phone ? '<br><small class="muted">'+order.customer.phone+'</small>':''}${order.customer.cep ? '<br><small class="muted">CEP: '+order.customer.cep+'</small>':''}</td>
+            <td>${order.items.map(it => `${it.qty}× ${it.title}`).join('<br>')}</td>
+            <td>${formatBRL(order.total)}</td>
+            <td>${new Date(order.date).toLocaleString()}</td>
+            <td id="status-${order.id}">${order.status || 'pending'}</td>
+            <td>
+              <button class="btn ghost" data-download="${order.id}">Baixar</button>
+              <button class="btn ghost" data-toggle="${order.id}">Marcar processado</button>
+              <button class="btn ghost" data-delete="${order.id}">Excluir</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function downloadBlob(text, filename='data.json'){
+        const blob = new Blob([text], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      document.getElementById('download-all').addEventListener('click', ()=>{
+        const data = localStorage.getItem(ordersKey) || '[]';
+        downloadBlob(data, `onix_pedidos_${new Date().toISOString().slice(0,10)}.json`);
+      });
+
+      document.getElementById('clear-orders').addEventListener('click', ()=>{
+        if(!confirm('Tem certeza que deseja limpar todos os pedidos salvos localmente?')) return;
+        localStorage.removeItem(ordersKey);
+        render();
+      });
+
+      document.getElementById('refresh-orders').addEventListener('click', render);
+
+      document.getElementById('orders-table').addEventListener('click', (e)=>{
+        const dl = e.target.closest('button[data-download]');
+        const toggle = e.target.closest('button[data-toggle]');
+        const del = e.target.closest('button[data-delete]');
+        if(dl){
+          const id = dl.getAttribute('data-download');
+          const order = getOrders().find(o=>o.id===id);
+          if(order) downloadBlob(JSON.stringify(order, null, 2), `pedido_${id}.json`);
+        } else if(toggle){
+          const id = toggle.getAttribute('data-toggle');
+          const list = getOrders();
+          const order = list.find(o=>o.id===id);
+          if(order){
+            order.status = order.status === 'processed' ? 'pending' : 'processed';
+            setOrders(list);
+            render();
+          }
+        } else if(del){
+          const id = del.getAttribute('data-delete');
+          if(!confirm('Excluir esse pedido permanentemente?')) return;
+          const list = getOrders().filter(o=>o.id!==id);
+          setOrders(list);
+          render();
+        }
+      });
+
+      // set year footer
+      const y = new Date().getFullYear();
+      const el = document.getElementById('year'); if(el) el.textContent = y;
+
+      render();
+    })();
+  </script>
+</body>
+</html>
